@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Me To There – instant redirector</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .card {
+            background: white;
+            max-width: 650px;
+            width: 100%;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        h1 { font-size: 2rem; margin-bottom: 0.25rem; color: #1e3a8a; font-weight: 600; }
+        .tagline { color: #4b5563; margin-bottom: 1.5rem; font-size: 0.9rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.75rem; }
+        .input-group { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        input { flex: 1; padding: 0.6rem 1rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; font-family: inherit; }
+        input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+        button { background: #2563eb; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #1e40af; }
+        .example { font-size: 0.8rem; color: #6b7280; margin-top: 0.75rem; }
+        .example a { color: #2563eb; text-decoration: none; }
+        .example a:hover { text-decoration: underline; }
+        .info-section { margin-top: 2rem; border-top: 1px solid #e5e7eb; padding-top: 1.2rem; text-align: left; font-size: 0.85rem; color: #374151; }
+        .info-section h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #1e3a8a; }
+        .info-section ul, .info-section p { margin-bottom: 0.75rem; margin-left: 1.2rem; }
+        .bookmarklet { background: #f3f4f6; padding: 0.5rem; border-radius: 6px; font-family: monospace; font-size: 0.8rem; word-break: break-all; border: 1px solid #e5e7eb; display: inline-block; }
+        .quick-links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
+        .quick-links a { background: #eef2ff; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem; text-decoration: none; color: #1e3a8a; }
+        .quick-links a:hover { background: #e0e7ff; }
+        footer { margin-top: 1.5rem; font-size: 0.7rem; color: #9ca3af; text-align: center; }
+        code { background: #f3f4f6; padding: 0.2rem 0.3rem; border-radius: 4px; font-family: monospace; font-size: 0.8rem; }
+        .redirect-message { margin-top: 1.2rem; padding: 0.75rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9rem; color: #1f2937; }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #d1d5db; border-top-color: #2563eb; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error { color: #b91c1c; background: #fee2e2; border-color: #fecaca; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>🚀 Take Me To There</h1>
+    <div class="tagline">type a domain – we'll take you there</div>
+
+    <form id="redirectForm">
+        <div class="input-group">
+            <input type="text" id="requestedUrl" placeholder="example.com or https://..." autofocus>
+            <button type="submit">Go →</button>
+        </div>
+    </form>
+    <div class="example">
+        💡 Try: <a href="?google.com">takemetothere.github.io/?google.com</a>
+    </div>
+
+    <div id="status" class="redirect-message" style="display:none;">
+        <div class="spinner"></div> Processing...
+    </div>
+
+    <div class="info-section">
+        <h3>📖 How to use</h3>
+        <p>Type any domain (with or without <code>https://</code>) – we add <code>https://</code> automatically.</p>
+        <p><strong>Examples:</strong></p>
+        <div class="quick-links">
+            <a href="?google.com">google.com</a>
+            <a href="?youtube.com">youtube.com</a>
+            <a href="?reddit.com">reddit.com</a>
+            <a href="?wikipedia.org">wikipedia.org</a>
+            <a href="?github.com">github.com</a>
+            <a href="?x.com">x.com</a>
+        </div>
+
+        <h3>🔖 Bookmarklet</h3>
+        <p><span class="bookmarklet"><a href="javascript:(function(){let u=prompt('Enter domain or URL:','');if(u){let f=u;if(!f.startsWith('http://')&&!f.startsWith('https://'))f='https://'+f;location.href='https://takemetothere.github.io/go/?requestedUrl='+encodeURIComponent(f);}})();">Take Me To There</a></span><br>
+        <small>Drag to bookmarks bar – click, enter URL, get redirected.</small></p>
+
+        <h3>⚡ Tips</h3>
+        <ul>
+            <li>You can use full paths: <code>?github.com/features/copilot</code></li>
+            <li>No tracking, no logs – everything in your browser.</li>
+        </ul>
+    </div>
+
+    <footer>no tracking &nbsp;|&nbsp; no cookies &nbsp;|&nbsp; just redirects</footer>
+</div>
+
+<script>
+    const statusDiv = document.getElementById('status');
+    
+    function sendToGo(rawInput) {
+        let target = rawInput.trim();
+        if (!target) return false;
+        
+        if (!target.startsWith('http://') && !target.startsWith('https://')) {
+            target = 'https://' + target;
+        }
+        
+        const dangerous = ['javascript:', 'data:', 'vbscript:', 'file:', 'about:'];
+        if (dangerous.some(proto => target.toLowerCase().startsWith(proto))) {
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '<div class="redirect-message error" style="color:#b91c1c; background:#fee2e2;">❌ Blocked: unsafe protocol</div>';
+            return false;
+        }
+        
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = `<div class="redirect-message"><div class="spinner"></div> Redirecting to ${target}...</div>`;
+        
+        setTimeout(() => {
+            window.location.href = `/go/?requestedUrl=${encodeURIComponent(target)}`;
+        }, 150);
+        return true;
+    }
+    
+    // If root is accessed with ?query (e.g., ?google.com)
+    const query = window.location.search.substring(1);
+    if (query) {
+        sendToGo(query);
+    } else {
+        const form = document.getElementById('redirectForm');
+        const input = document.getElementById('requestedUrl');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const value = input.value;
+            if (value) sendToGo(value);
+        });
+    }
+</script>
+</body>
+</html>
