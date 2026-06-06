@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Take Me To There – redirect endpoint</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .card {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+        .error-message {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+        .error-code {
+            font-family: monospace;
+            font-size: 0.85rem;
+            background: #f3f4f6;
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #9ca3af;
+        }
+        code {
+            background: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>🚀 Take Me To There</h1>
+    <div id="content"></div>
+    <footer>
+        <a href="/">← back to root</a>
+    </footer>
+</div>
+
+<script>
+    (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let requested = urlParams.get('requestedUrl');
+        
+        if (requested && requested.trim() !== "") {
+            let target = decodeURIComponent(requested).trim();
+            if (!target.startsWith('http://') && !target.startsWith('https://')) {
+                target = 'https://' + target;
+            }
+            // Redirect immediately
+            window.location.href = target;
+            return;
+        }
+        
+        // Missing requestedUrl parameter – show 404 error and log to console
+        console.error("GET /go 404 (Not Found) - Unable to locate the requested URL");
+        console.error("The server responded with a 404 status code (missing 'requestedUrl' parameter)");
+        
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = `
+            <div class="error-message">
+                <strong>⚠️ Unable to locate the requested URL</strong><br>
+                The server responded with <code>404 Not Found</code>.
+                <div class="error-code">missing parameter: requestedUrl</div>
+            </div>
+            <p style="margin-top:1rem; font-size:0.85rem;">Usage: <code>/go/?requestedUrl=example.com</code></p>
+            <p style="margin-top:0.5rem;"><a href="/">return to home page</a></p>
+        `;
+    })();
+</script>
+</body>
+</html>
